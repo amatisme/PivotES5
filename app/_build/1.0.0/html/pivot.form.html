@@ -1,0 +1,109 @@
+<!-- Version 2.0.5 -->
+
+  <!-- crumb -->
+  <div class="ui-margin-top">
+    <buttonevent-component
+      data-ng-if=ctrl.formService.crumb
+      class="button-event-parent" 
+      data-ng-repeat='each in ctrl.formService.crumb'
+      icon="'close'"
+      label=each 
+      callback-fn=ctrl.formService.UnsetCrumb($index)>
+    </buttonevent-component>
+  </div>
+  
+  <!-- notification -->
+  <div class="ui-margin-top palette-dim" data-ng-if="!ctrl.formService.submit">
+    <notification-component 
+      data-ng-if=!ctrl.formService.notification
+      icon="'sms'" 
+      label=undefined
+      detail="'Select from the following options'">
+    </notification-component>
+    <notification-component 
+      data-ng-if=ctrl.formService.notification
+      icon="'sms'" 
+      label="'Notification'"
+      detail=ctrl.formService.notification.label>
+    </notification-component>
+  </div>
+  
+    
+  <!-- forms -->
+  <div class="ui-margin-top" data-ng-if=!ctrl.formService.form>
+    <div class="ui-flex ui-margin-small-bottom">
+      <buttonevent-component
+        class="ui-flex-item button-event" 
+        data-ng-if="ctrl.formService.AuthorizeByGroups(ctrl.authService.user.business_unit,each.groups) && each.label"
+        data-ng-repeat='each in ctrl.formService.forms' 
+        icon=each.icon
+        iconsize="'3rem'"
+        label=each.label 
+        summary=each.description
+        yalign="'top'"
+        callback-fn=ctrl.formService.SetForm(each);ctrl.formService.SetCrumb(each.label)>
+      </buttonevent-component>
+    </div>
+  </div>
+  <!-- form -->
+  <div class="ui-margin-top" data-ng-if="ctrl.formService.form && !ctrl.formService.submit">
+    <form class="ui-margin-large-bottom" name=myForm validate enctype="multipart/form-data">
+      <!-- types -->
+      <div class="ui-flex ui-margin-top" data-ng-if="ctrl.formService.form.types && !ctrl.formService.type">
+        <buttonevent-component
+          class="ui-flex-item button-event" 
+          data-ng-model=ctrl.formService.object.type
+          data-ng-required=true
+          data-ng-if=ctrl.formService.AuthorizeByGroups(ctrl.authService.user.business_unit,each.groups)
+          data-ng-repeat='each in ctrl.formService.form.types' 
+          icon=each.icon
+          label=each.label 
+          summary=each.description
+          callback-fn=ctrl.formService.SetType(each.label);ctrl.formService.SetCrumb(each.label)>
+        </buttonevent-component>
+      </div>
+      <!-- form -->
+      <div data-ng-include 
+        data-ng-if="ctrl.formService.type && ctrl.formService.form" 
+        data-ng-init='ctrl.formService.SetValidate();ctrl.formService.SetNotification()'
+        src=ctrl.formService.form.path>
+      </div>
+      <!-- submit -->
+      <buttonsubmit-component 
+        label=ctrl.formService.form.submit_button_label
+        object=myForm
+        validate=ctrl.formService.validate
+        callback-fn=ctrl.formService.SubmitForm(obj)>
+      </buttonsubmit-component>
+    </form>
+  </div>
+
+  <!-- submit ok -->
+  <div class="ui-margin-top" data-ng-if=ctrl.formService.submit.ok>
+    <div class="palette-dim">
+        <ul class="ui-table">
+            <li class="ui-padding ui-squeeze"><i class="material-icons">done</i></li>
+            <li class="ui-padding palette-tint">
+              <span class="font-large">Success</span><br />
+              <span class="font-dim font-small">{{ctrl.formService.submit.message}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="ui-margin-top" data-ng-include src=ctrl.formService.form.path data-ng-if=ctrl.formService.submit.ok></div>
+    <button type="button" class="button-event ui-margin-top ui-stretch" data-ng-click=ctrl.formService.UnsetForm()>Close</button>
+  </div>
+
+  <!-- submit error -->
+  <div class="ui-margin-top" data-ng-if=ctrl.formService.submit.error>
+    <label class="font-largest">An error has occured.</label>
+    <div class="palette-alert">
+      <ul class="ui-table">
+          <li class="ui-padding ui-squeeze"><i class="material-icons">error_outline</i></li>
+          <li class="ui-padding palette-tint">
+            <span class="font-large">Error</span><br />
+            <span class="font-dim font-small">{{ctrl.formService.submit.error.message}}</span>
+          </li>
+      </ul>
+    </div>
+    <button class="button-event ui-margin-top ui-stretch" data-ng-click=ctrl.formServic.UnsetForm()>Retry</button>
+  </div>

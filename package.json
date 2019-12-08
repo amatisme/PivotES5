@@ -1,0 +1,27 @@
+{
+  "name": "lib-njs",
+  "description": "Component Library - NodeJS, AngularJS",
+  "private": true,
+  "license": "Apache-2.0",
+  "version": "1.0.0",
+  "author": "whitbyon",
+  "main": "server.js",
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "@google-cloud/connect-firestore": "^1.0.3",
+    "@google-cloud/firestore": "^2.6.0",
+    "@google-cloud/storage": "^4.1.3",
+    "async": "^2.6.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.6",
+    "express-session": "^1.17.0",
+    "firebase-admin": "^8.7.0",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}

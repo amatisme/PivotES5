@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html data-ng-app=app>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script>
+      var app = angular.module('app', []);
+      app.controller('ctrl', function ($scope)
+      {
+        $scope.object = undefined;
+        $scope.Callback = function(obj) { $scope.object = obj; }
+      });
+    </script>
+  </head>
+  <body data-ng-controller="ctrl">
+    <script src="select-date.js"></script>
+    <h3>Select Date: v1.0.1</h3>
+    <selectdate-component label="'Future TRUE'" object=object required=true callback-fn=Callback(obj) future=true></selectdate-component>
+    <selectdate-component label="'Future FALSE'" object=object required=true callback-fn=Callback(obj)></selectdate-component>
+    <br />
+    <code>
+      <b>Version 1.0.1</b><br/>
+      <ul>
+        <li>added future param which set future dates only</li>
+        <li>improved clearing of object on any change</li>
+      </ul>
+      <hr />
+      Result: {{object}}
+    </code>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!-- Version 1.0.0 -->
+  <!-- Start Message Prompt-->
+  <div class="palette-message" data-ng-if=ctrl.error>
+    <ul class="ui-table">
+      <li class="ui-vertical-top ui-padding ui-wrap-none"><i class="material-icons">warning</i></li>
+      <li class="ui-vertical-top ui-padding ui-stretch ui-tint-dark">{{ctrl.error}}</li>
+    </ul>
+  </div>
+  <!-- End Message Prompt-->
+
+  <!-- Start Control -->
+  <div>
+    <ul class="ui-table palette-light ui-padding-small ui-responsive-block">
+      <li class="ui-stretch ui-responsive-block">
+        <searchkeyword-component
+          class="ui-stretch"
+          config=ctrl.config
+          query=ctrl.templateService.search
+          callback-fn=ctrl.templateService.SetSearch(obj)>
+        </searchkeyword-component>
+      </li>
+      <li class="ui-responsive-block ui-wrap-none">
+        <select name=object data-ng-model=ctrl.templateService.filter data-ng-options="each as each.label for each in ctrl.templateService.view.properties.filters">
+          <option value="">Filter</option>
+        </select>
+        <button type=text data-ng-if=ctrl.templateService.filter data-ng-click=ctrl.templateService.SetFilter(undefined)><i class="material-icons">close</i></button>
+      </li>
+    </ul>
+  </div>
+  <!-- End Control -->
+
+  <!-- Start If Objects -->
+  <layer-y-scroll>
+    <div data-ng-if=ctrl.templateService.objects>
+
+      <!-- Start Results Prompt-->
+      <div class="palette-message">
+        <ul class="ui-table">
+          <li class="ui-vertical-top ui-padding ui-wrap-none"><i class="material-icons">visibility</i></li>
+          <li class="ui-vertical-top ui-padding ui-tint-dark">
+            <span class="font-small ui-wrap-none">Showing {{(ctrl.templateService.GetObjects() | filter:{"vertical":ctrl.templateService.filter.vertical} | filter: ctrl.templateService.search.value.$).length}} of {{ctrl.templateService.objects.length}} items.</span>
+          </li>
+          <li class="ui-vertical-top ui-padding ui-tint-dark ui-stretch">
+            <span class="font-small" data-ng-if=ctrl.filter.description>{{ctrl.templateService.filter.vertical}}: <span class="font-dim">{{ctrl.templateService.filter.description}}</span></span>
+          </li>
+        </ul>
+      </div>
+      <!-- End Results Prompt-->
+
+      <!-- Start Cell Iteration -->
+      <div
+        class="ui-border-bottom"
+        data-ng-if="(ctrl.templateService.objects | filter:ctrl.templateService.filter.vertical | filter: ctrl.templateService.search.value.$).length"
+        data-ng-repeat="each in ctrl.templateService.GetObjects() | filter:ctrl.templateService.filter.vertical | filter: ctrl.templateService.search.value.$">
+
+        <!-- Cell Component Type set in app config -->
+        <div data-ng-if='ctrl.templateService.view.properties.cell=="custom"' data-ng-include src="'cell.html'"></div>
+
+        <cellstub-component
+          data-ng-if="ctrl.templateService.view.properties.cell=='stub'"
+          search=ctrl.templateService.search
+          object=each
+          callback-fn="ctrl.templateService.SetSearch(obj)">
+        </cellstub-component>
+
+        <cellemployee-component
+          data-ng-if="ctrl.templateService.view.properties.cell=='employee'"
+          search=ctrl.search
+          object=each>
+        </cellemployee-component>
+      </div>
+      <!-- End Cell Iteration -->
+    </div>
+  </layer-y-scroll>
